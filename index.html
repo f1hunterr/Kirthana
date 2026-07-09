@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kirthana D — Delivery Manager</title>
+<meta name="description" content="Kirthana D — Delivery Manager. 6+ years leading global service delivery, data operations, and process improvement.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EEF2F1;
+    --paper-card:#FFFFFF;
+    --ink:#122530;
+    --ink-soft:#3E5C6B;
+    --line:#CBD5D3;
+    --signal:#1F8A70;
+    --signal-dim:#E4F1EC;
+    --amber:#C9822E;
+    --amber-dim:#F6EADA;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+    --disp: 'Space Grotesk', sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.55;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:48px 48px;
+    background-position:-1px -1px;
+    background-attachment:fixed;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  a{color:inherit;}
+  ::selection{background:var(--signal); color:#fff;}
+
+  :focus-visible{
+    outline:2px solid var(--signal);
+    outline-offset:3px;
+  }
+
+  .wrap{max-width:1040px; margin:0 auto; padding:0 28px;}
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(238,242,241,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:1040px; margin:0 auto; padding:16px 28px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .nav-id{
+    font-family:var(--mono); font-size:13px; letter-spacing:0.02em;
+    display:flex; align-items:center; gap:10px;
+  }
+  .dot{width:8px; height:8px; border-radius:50%; background:var(--signal); box-shadow:0 0 0 3px var(--signal-dim); flex-shrink:0;}
+  .nav-links{display:flex; gap:26px; font-family:var(--mono); font-size:13px;}
+  .nav-links a{text-decoration:none; color:var(--ink-soft); border-bottom:1px solid transparent; padding-bottom:2px; transition:border-color .15s, color .15s;}
+  .nav-links a:hover{color:var(--ink); border-color:var(--signal);}
+  @media(max-width:640px){ .nav-links{display:none;} }
+
+  /* ---------- HERO ---------- */
+  .hero{padding:76px 0 56px;}
+  .eyebrow{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--ink-soft); margin:0 0 18px;
+  }
+  h1.name{
+    font-family:var(--disp); font-weight:700;
+    font-size:clamp(40px, 7vw, 68px);
+    margin:0; line-height:1.02; letter-spacing:-0.01em;
+  }
+  .role{
+    font-family:var(--disp); font-weight:500; font-size:clamp(18px,2.6vw,24px);
+    color:var(--signal); margin:10px 0 22px;
+  }
+  .pitch{
+    max-width:560px; font-size:16.5px; color:var(--ink-soft); margin:0 0 26px;
+  }
+  .status-pill{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--mono); font-size:12.5px;
+    background:var(--signal-dim); color:#0F5C48;
+    border:1px solid #BFE3D6; border-radius:100px;
+    padding:7px 14px; margin-bottom:40px;
+  }
+  .status-pill .dot{background:var(--signal);}
+
+  .stat-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line);
+  }
+  @media(max-width:700px){ .stat-grid{grid-template-columns:repeat(2,1fr);} }
+  .stat-tile{
+    background:var(--paper-card); padding:20px 18px;
+  }
+  .stat-num{font-family:var(--disp); font-weight:700; font-size:26px; color:var(--ink);}
+  .stat-label{font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.06em; margin-top:4px;}
+
+  /* ---------- SECTION SHELL ---------- */
+  section{padding:64px 0;}
+  .sec-head{
+    display:flex; align-items:baseline; gap:14px; margin-bottom:36px;
+    border-bottom:1px solid var(--line); padding-bottom:14px;
+  }
+  .sec-index{font-family:var(--mono); font-size:12.5px; color:var(--signal);}
+  h2{
+    font-family:var(--disp); font-size:26px; font-weight:600; margin:0;
+    letter-spacing:-0.01em;
+  }
+  .sec-sub{font-family:var(--mono); font-size:12px; color:var(--ink-soft); margin-left:auto;}
+
+  /* ---------- SUMMARY ---------- */
+  .summary-text{max-width:680px; font-size:16.5px; color:#25404C;}
+
+  /* ---------- PIPELINE (career timeline) ---------- */
+  .pipeline{position:relative; padding-left:28px;}
+  .pipeline::before{
+    content:""; position:absolute; left:5px; top:6px; bottom:6px; width:2px;
+    background:linear-gradient(var(--line), var(--line));
+  }
+  .stage{position:relative; padding-bottom:38px;}
+  .stage:last-child{padding-bottom:0;}
+  .stage-marker{
+    position:absolute; left:-28px; top:4px; width:12px; height:12px; border-radius:50%;
+    background:var(--paper); border:2px solid var(--ink-soft);
+  }
+  .stage.active .stage-marker{background:var(--signal); border-color:var(--signal); box-shadow:0 0 0 4px var(--signal-dim);}
+  .stage-top{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:6px;}
+  .stage-tag{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:0.05em; text-transform:uppercase;
+    padding:2px 8px; border-radius:3px; border:1px solid var(--line); color:var(--ink-soft);
+  }
+  .stage.active .stage-tag{background:var(--signal-dim); border-color:#BFE3D6; color:#0F5C48;}
+  .stage-dates{font-family:var(--mono); font-size:12px; color:var(--ink-soft);}
+  .stage-role{font-family:var(--disp); font-weight:600; font-size:18px; margin:2px 0 2px;}
+  .stage-org{color:var(--signal); font-weight:500;}
+  .stage ul{margin:10px 0 0; padding-left:18px; color:#25404C; font-size:15px;}
+  .stage li{margin-bottom:5px;}
+
+  /* ---------- EXPERTISE MODULES ---------- */
+  .module-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  @media(max-width:800px){ .module-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:520px){ .module-grid{grid-template-columns:1fr;} }
+  .module{
+    background:var(--paper-card); border:1px solid var(--line); padding:18px;
+    transition:border-color .15s, transform .15s;
+  }
+  .module:hover{border-color:var(--signal); transform:translateY(-2px);}
+  .module-tag{
+    font-family:var(--mono); font-size:11px; color:var(--amber);
+    background:var(--amber-dim); display:inline-block; padding:2px 7px; border-radius:3px;
+    margin-bottom:10px; letter-spacing:0.04em;
+  }
+  .module-title{font-family:var(--disp); font-weight:600; font-size:16px; margin:0 0 6px;}
+  .module-desc{font-size:14px; color:var(--ink-soft); margin:0;}
+
+  /* ---------- SPECS (technical skills) ---------- */
+  .spec-table{border-top:1px solid var(--line);}
+  .spec-row{
+    display:grid; grid-template-columns:160px 1fr;
+    border-bottom:1px solid var(--line); padding:14px 0; gap:10px;
+  }
+  @media(max-width:600px){ .spec-row{grid-template-columns:1fr;} }
+  .spec-key{font-family:var(--mono); font-size:12.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.05em;}
+  .spec-val{font-family:var(--mono); font-size:14.5px; color:var(--ink);}
+
+  /* ---------- EDUCATION / CERTS ---------- */
+  .ed-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  @media(max-width:700px){ .ed-grid{grid-template-columns:1fr;} }
+  .ed-card{background:var(--paper-card); border:1px solid var(--line); padding:20px;}
+  .ed-degree{font-family:var(--disp); font-weight:600; font-size:16.5px; margin:0 0 4px;}
+  .ed-school{font-size:14px; color:var(--ink-soft); margin:0 0 8px;}
+  .ed-score{font-family:var(--mono); font-size:12.5px; color:var(--signal);}
+  .cert-list{display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;}
+  .cert-chip{
+    font-family:var(--mono); font-size:12px; border:1px solid var(--line);
+    padding:6px 12px; border-radius:100px; color:var(--ink-soft);
+  }
+
+  /* ---------- CONTACT ---------- */
+  .terminal{
+    background:var(--ink); color:#DDEAE6; border-radius:6px; padding:26px 28px;
+    font-family:var(--mono); font-size:14.5px; line-height:2;
+    max-width:640px;
+  }
+  .terminal .prompt{color:var(--signal);}
+  .terminal a{color:#DDEAE6; text-decoration:underline; text-decoration-color:var(--ink-soft);}
+  .terminal a:hover{color:#fff; text-decoration-color:var(--signal);}
+
+  footer{
+    border-top:1px solid var(--line); padding:26px 0 40px;
+    font-family:var(--mono); font-size:12px; color:var(--ink-soft);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="nav-id"><span class="dot"></span> KIRTHANA D</div>
+    <nav class="nav-links">
+      <a href="#summary">Summary</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#expertise">Expertise</a>
+      <a href="#specs">Specs</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <p class="eyebrow">Portfolio — Delivery &amp; Operations</p>
+    <h1 class="name">Kirthana D</h1>
+    <p class="role">Delivery Manager</p>
+    <p class="pitch">I keep global service delivery on schedule, on spec, and audit-ready — across government programs and multinational client accounts.</p>
+    <div class="status-pill"><span class="dot"></span> Open to new opportunities</div>
+
+    <div class="stat-grid">
+      <div class="stat-tile"><div class="stat-num">6+</div><div class="stat-label">Years Experience</div></div>
+      <div class="stat-tile"><div class="stat-num">5+</div><div class="stat-label">Global Clients</div></div>
+      <div class="stat-tile"><div class="stat-num">7+</div><div class="stat-label">UDB Migrations Led</div></div>
+      <div class="stat-tile"><div class="stat-num">PBI</div><div class="stat-label">Certified</div></div>
+    </div>
+  </section>
+
+  <section id="summary">
+    <div class="sec-head">
+      <span class="sec-index">01</span>
+      <h2>Summary</h2>
+    </div>
+    <p class="summary-text">Dynamic, results-oriented Delivery Manager with 6+ years leading high-stakes operations and client servicing across global accounts. Proven record managing large-scale, government-affiliated projects and a portfolio of 5+ international clients. MSc in Computer Science, combining analytical rigor with hands-on delivery leadership and Lean-driven process optimization.</p>
+  </section>
+
+  <section id="pipeline">
+    <div class="sec-head">
+      <span class="sec-index">02</span>
+      <h2>Delivery Pipeline</h2>
+      <span class="sec-sub">career progression, 2019 → present</span>
+    </div>
+
+    <div class="pipeline">
+
+      <div class="stage">
+        <div class="stage-marker"></div>
+        <div class="stage-top">
+          <span class="stage-tag">Complete</span>
+          <span class="stage-dates">Nov 2019 – Apr 2021</span>
+        </div>
+        <div class="stage-role">Team Leader <span class="stage-org">· Fairdinkum Business Service Pvt Ltd</span></div>
+        <ul>
+          <li>Promoted to Team Leader for the VEU project, delivered on behalf of the Australian Government.</li>
+          <li>Supervised a team of Outbound Calling Agents, consistently meeting and exceeding performance KPIs.</li>
+        </ul>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker"></div>
+        <div class="stage-top">
+          <span class="stage-tag">Complete</span>
+          <span class="stage-dates">May 2021 – Mar 2022</span>
+        </div>
+        <div class="stage-role">Customer Relationship Officer <span class="stage-org">· Expert Caller Pvt Ltd (ECPL)</span></div>
+        <ul>
+          <li>Managed end-to-end client relationships, consistently ensuring high satisfaction and retention.</li>
+          <li>Recognized as "Best Employee of the Year" for outstanding service delivery.</li>
+        </ul>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker"></div>
+        <div class="stage-top">
+          <span class="stage-tag">Complete</span>
+          <span class="stage-dates">Mar 2022 – 2024</span>
+        </div>
+        <div class="stage-role">Senior Associate, DM Team <span class="stage-org">· Genpact</span></div>
+        <ul>
+          <li>Partnered with Circana stakeholders to identify process improvements through analysis of workflows and market trends.</li>
+          <li>Played a key role in the UDB migration for 7+ clients transitioning from MDM to UDB.</li>
+          <li>Owned the end-to-end client process lifecycle, from attribute processing through final extract submission.</li>
+        </ul>
+      </div>
+
+      <div class="stage">
+        <div class="stage-marker"></div>
+        <div class="stage-top">
+          <span class="stage-tag">Complete</span>
+          <span class="stage-dates">1+ year</span>
+        </div>
+        <div class="stage-role">Business Analyst, PepsiCo Account <span class="stage-org">· Genpact</span></div>
+        <ul>
+          <li>Managed 7+ product categories, each with independent QC requirements handled to a high degree of accuracy.</li>
+          <li>Delivered weekly and monthly QCH reporting across STG and FSTG models.</li>
+        </ul>
+      </div>
+
+      <div class="stage active">
+        <div class="stage-marker"></div>
+        <div class="stage-top">
+          <span class="stage-tag">Active</span>
+          <span class="stage-dates">Current · 6+ months</span>
+        </div>
+        <div class="stage-role">Data Analyst, ISS R&amp;D Team <span class="stage-org">· Genpact</span></div>
+        <ul>
+          <li>Monitor daily file arrivals within the Independent Supplier Service (ISS) team.</li>
+          <li>Work across FactDB, IBM Mainframe, WinSCP, and Linux server environments.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="expertise">
+    <div class="sec-head">
+      <span class="sec-index">03</span>
+      <h2>Core Expertise</h2>
+    </div>
+    <div class="module-grid">
+      <div class="module">
+        <span class="module-tag">OPS</span>
+        <p class="module-title">Delivery Management</p>
+        <p class="module-desc">Leading concurrent global accounts end-to-end, on schedule and on spec.</p>
+      </div>
+      <div class="module">
+        <span class="module-tag">DATA</span>
+        <p class="module-title">Master Data Management</p>
+        <p class="module-desc">MDM, UDB, and Pangea frameworks across multi-client migrations.</p>
+      </div>
+      <div class="module">
+        <span class="module-tag">BI</span>
+        <p class="module-title">Power BI (Certified)</p>
+        <p class="module-desc">Dashboarding and reporting for high-accuracy data tracking.</p>
+      </div>
+      <div class="module">
+        <span class="module-tag">LEAN</span>
+        <p class="module-title">Lean Methodology</p>
+        <p class="module-desc">Workflow optimization and operational waste reduction.</p>
+      </div>
+      <div class="module">
+        <span class="module-tag">QA</span>
+        <p class="module-title">Quality Control</p>
+        <p class="module-desc">STG/FSTG audits and QCH reporting on weekly and monthly cycles.</p>
+      </div>
+      <div class="module">
+        <span class="module-tag">CX</span>
+        <p class="module-title">Client Relationship Management</p>
+        <p class="module-desc">Escalation resolution and retention across a global client base.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="specs">
+    <div class="sec-head">
+      <span class="sec-index">04</span>
+      <h2>Technical Specs</h2>
+    </div>
+    <div class="spec-table">
+      <div class="spec-row">
+        <div class="spec-key">Languages</div>
+        <div class="spec-val">Java · C · C++ · Visual Basic 6.0 · Unix</div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-key">Platforms</div>
+        <div class="spec-val">IBM Mainframe · WinSCP · Linux Server</div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-key">Tools</div>
+        <div class="spec-val">FactDB · UDB · Pangea · Stat-on · OMS · Unify</div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-key">Analytics</div>
+        <div class="spec-val">Power BI (Certified) · MS Excel (Advanced) · MS Word · PowerPoint</div>
+      </div>
+    </div>
+
+    <div class="ed-grid" style="margin-top:36px;">
+      <div class="ed-card">
+        <p class="ed-degree">MSc, Computer Science</p>
+        <p class="ed-school">IndoAsian Women's Degree and PG College · 2021</p>
+        <p class="ed-score">88% — Distinction</p>
+      </div>
+      <div class="ed-card">
+        <p class="ed-degree">BCA</p>
+        <p class="ed-school">IndoAsian Women's Degree and PG College · 2019</p>
+        <p class="ed-score">83% — First Class Exemplary</p>
+      </div>
+    </div>
+
+    <div class="cert-list">
+      <span class="cert-chip">✓ Power BI Certified</span>
+      <span class="cert-chip">✓ Lean Methodology Certified</span>
+      <span class="cert-chip">English — Professional Fluency</span>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="sec-head">
+      <span class="sec-index">05</span>
+      <h2>Contact</h2>
+    </div>
+    <div class="terminal">
+      <div><span class="prompt">$</span> contact --email <a href="mailto:kirthanad1432@gmail.com">kirthanad1432@gmail.com</a></div>
+      <div><span class="prompt">$</span> contact --phone <a href="tel:+919538401413">+91 9538401413</a></div>
+      <div><span class="prompt">$</span> location <span>Bangalore, India</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <span>© <span id="year"></span> Kirthana D</span>
+  <span>Built for delivery, designed for detail.</span>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
