@@ -68,6 +68,11 @@
     transition:background .15s;
   }
   .nav-cta:hover{background:var(--navy-deep);}
+  .nav-cta-ghost{
+    background:transparent; color:var(--navy); border:1px solid var(--line-strong);
+  }
+  .nav-cta-ghost:hover{background:#fff; border-color:var(--navy); color:var(--navy-deep);}
+  @media(max-width:900px){ .nav-cta-ghost{display:none;} }
   @media(max-width:760px){ .nav-links{display:none;} }
 
   /* ---------- HERO ---------- */
@@ -88,6 +93,14 @@
     background:var(--teal-tint); color:#0B5F56; border:1px solid #C8E6E0; border-radius:100px; padding:6px 14px;
   }
   .status-dot{width:7px; height:7px; border-radius:50%; background:var(--teal);}
+
+  .hero-resume-btn{
+    display:inline-flex; align-items:center; gap:8px; font-family:var(--disp); font-weight:600; font-size:14px;
+    color:#fff; background:var(--navy); padding:11px 20px; border-radius:8px; text-decoration:none;
+    transition:background .15s;
+  }
+  .hero-resume-btn svg{width:16px; height:16px;}
+  .hero-resume-btn:hover{background:var(--navy-deep);}
 
   .kpi-card{background:var(--card); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); padding:22px;}
   .kpi-grid{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden; box-shadow:var(--shadow);}
@@ -259,6 +272,7 @@
       <a href="#specs">Specs</a>
       <a href="#arcade">Play</a>
     </nav>
+    <a class="nav-cta nav-cta-ghost" href="assets/Kirthana-D-Resume.pdf" download="Kirthana-D-Resume.pdf">Download Resume</a>
     <a class="nav-cta" href="mailto:kirthanad1432@gmail.com">Email Kirthana</a>
   </div>
 </header>
@@ -272,6 +286,12 @@
       <p class="role">Delivery Manager</p>
       <p class="pitch">I keep global service delivery on schedule, on spec, and audit-ready — across government programs and multinational client accounts.</p>
       <div class="status-pill"><span class="status-dot"></span> Open to new opportunities</div>
+      <div style="margin-top:20px;">
+        <a class="hero-resume-btn" href="assets/Kirthana-D-Resume.pdf" download="Kirthana-D-Resume.pdf">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          Download Resume (PDF)
+        </a>
+      </div>
     </div>
 
     <div class="kpi-grid">
