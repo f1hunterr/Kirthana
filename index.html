@@ -185,6 +185,60 @@
     border-top:1px solid var(--line); padding:24px 0 40px; font-size:12.5px; color:var(--ink-faint);
     display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
   }
+
+  /* ---------- ARCADE / GAME ---------- */
+  .game-card{
+    background:var(--card); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow);
+    padding:24px 28px 28px;
+  }
+  .game-hud{
+    display:flex; align-items:center; gap:22px; flex-wrap:wrap; margin-bottom:14px;
+    font-family:var(--mono); font-size:12.5px; color:var(--ink-soft);
+  }
+  .game-hud b{color:var(--navy-deep); font-size:14px;}
+  .game-stage{
+    position:relative; width:100%; max-width:640px; height:340px; margin:0 auto;
+    background:linear-gradient(#EAF1F5,#F6F9FA); border:1px solid var(--line); border-radius:10px;
+    overflow:hidden; touch-action:none; cursor:pointer;
+  }
+  .game-deadline{
+    position:absolute; left:0; right:0; bottom:48px; height:1px; background:#E2897A;
+    box-shadow:0 0 0 1px rgba(226,137,122,0.15);
+  }
+  .game-deadline::after{
+    content:"SLA DEADLINE"; position:absolute; right:8px; top:-16px; font-family:var(--mono);
+    font-size:9.5px; letter-spacing:0.05em; color:#C4614F;
+  }
+  .game-truck{
+    position:absolute; bottom:8px; width:64px; height:34px; background:var(--navy);
+    border-radius:6px 6px 3px 3px;
+  }
+  .game-truck::after{
+    content:""; position:absolute; left:6px; right:6px; top:6px; height:10px; background:var(--teal); border-radius:2px;
+  }
+  .game-parcel{
+    position:absolute; width:30px; height:26px; background:var(--gold-tint); border:1.5px solid var(--gold);
+    border-radius:4px; display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:8px; color:#7A5A17; font-weight:600; line-height:1.1; text-align:center;
+  }
+  .game-float{
+    position:absolute; font-family:var(--mono); font-weight:600; font-size:13px; color:var(--teal);
+    pointer-events:none;
+  }
+  .game-overlay{
+    position:absolute; inset:0; background:rgba(15,41,71,0.94); color:#fff;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:24px;
+    gap:6px;
+  }
+  .game-overlay h3{font-family:var(--disp); font-size:22px; margin:4px 0;}
+  .game-overlay p{font-size:13.5px; color:#B9C7D3; margin:0 0 6px; max-width:340px;}
+  .game-btn{
+    margin-top:10px; font-family:var(--disp); font-weight:600; font-size:14px; color:#fff;
+    background:var(--teal); border:none; padding:10px 22px; border-radius:7px; cursor:pointer;
+    transition:background .15s;
+  }
+  .game-btn:hover{background:#0B6F65;}
+  .game-note{font-size:12.5px; color:var(--ink-faint); margin-top:12px;}
 </style>
 </head>
 <body>
@@ -203,6 +257,7 @@
       <a href="#timeline">Timeline</a>
       <a href="#expertise">Expertise</a>
       <a href="#specs">Specs</a>
+      <a href="#arcade">Play</a>
     </nav>
     <a class="nav-cta" href="mailto:kirthanad1432@gmail.com">Email Kirthana</a>
   </div>
@@ -428,6 +483,33 @@
     </div>
   </section>
 
+  <section id="arcade">
+    <div class="sec-head"><span class="sec-eyebrow">05 · Just for Fun</span></div>
+    <h2>Delivery Sprint</h2>
+    <p class="sec-desc">A tiny arcade break. Move the truck, catch parcels before they cross the SLA deadline. 30 seconds — see what SLA% you can hit.</p>
+
+    <div class="game-card">
+      <div class="game-hud">
+        <div>Time: <b id="gTime">30</b>s</div>
+        <div>Delivered: <b id="gDelivered">0</b></div>
+        <div>Missed: <b id="gMissed">0</b></div>
+        <div>SLA: <b id="gSla">—</b></div>
+      </div>
+
+      <div class="game-stage" id="gStage">
+        <div class="game-deadline" id="gDeadline"></div>
+        <div class="game-truck" id="gTruck"></div>
+
+        <div class="game-overlay" id="gOverlay">
+          <h3 id="gOverlayTitle">Delivery Sprint</h3>
+          <p id="gOverlayText">Move your mouse (or use ← →) to steer the truck. Catch each parcel before it crosses the SLA deadline line. Ready?</p>
+          <button class="game-btn" id="gStartBtn">Start Sprint</button>
+        </div>
+      </div>
+      <p class="game-note">Keyboard: ← → to move. Mouse and touch also work. Your device's reduced-motion setting is respected.</p>
+    </div>
+  </section>
+
 </main>
 
 <footer class="wrap">
@@ -471,6 +553,206 @@
   todayLabel.style.left = pct(TODAY_INDEX) + '%';
   todayLabel.textContent = 'Today';
   axisTrack.appendChild(todayLabel);
+</script>
+
+<script>
+(function(){
+  const stage = document.getElementById('gStage');
+  const truck = document.getElementById('gTruck');
+  const overlay = document.getElementById('gOverlay');
+  const overlayTitle = document.getElementById('gOverlayTitle');
+  const overlayText = document.getElementById('gOverlayText');
+  const startBtn = document.getElementById('gStartBtn');
+  const elTime = document.getElementById('gTime');
+  const elDelivered = document.getElementById('gDelivered');
+  const elMissed = document.getElementById('gMissed');
+  const elSla = document.getElementById('gSla');
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reducedMotion){
+    overlayTitle.textContent = 'Delivery Sprint';
+    overlayText.textContent = "This mini-game uses continuous motion, so it's turned off to respect your device's reduced-motion setting.";
+    startBtn.remove();
+    stage.querySelector('.game-deadline').style.display = 'none';
+    truck.style.display = 'none';
+    return;
+  }
+
+  const TAGS = ['ACME','Northwind','Globex','Initech','Umbrella','Stark Ind','Wayne Co','Hooli'];
+  const DURATION = 30;
+  const DEADLINE_FROM_BOTTOM = 48;
+
+  let stageW, stageH, truckX, running=false, spawnTimer=null, rafId=null;
+  let delivered=0, missed=0, timeLeft=DURATION, lastTs=0, spawnEvery=900;
+  let parcels = []; // {el, x, y, speed}
+  let keyLeft=false, keyRight=false;
+
+  function layout(){
+    stageW = stage.clientWidth;
+    stageH = stage.clientHeight;
+    truckX = stageW/2 - 32;
+    truck.style.left = truckX + 'px';
+  }
+  layout();
+  window.addEventListener('resize', layout);
+
+  function resetHud(){
+    delivered=0; missed=0; timeLeft=DURATION; spawnEvery=900;
+    elTime.textContent = timeLeft;
+    elDelivered.textContent = delivered;
+    elMissed.textContent = missed;
+    elSla.textContent = '—';
+  }
+
+  function clearParcels(){
+    parcels.forEach(p => p.el.remove());
+    parcels = [];
+  }
+
+  function spawnParcel(){
+    const el = document.createElement('div');
+    el.className = 'game-parcel';
+    const tag = TAGS[Math.floor(Math.random()*TAGS.length)];
+    el.textContent = tag;
+    const x = 10 + Math.random() * (stageW - 40);
+    el.style.left = x + 'px';
+    el.style.top = '-30px';
+    stage.appendChild(el);
+    const speed = 60 + Math.random()*30 + (DURATION-timeLeft)*1.6; // px/sec, ramps up
+    parcels.push({el, x, y:-30, speed});
+  }
+
+  function floatText(x,y,text,color){
+    const f = document.createElement('div');
+    f.className = 'game-float';
+    f.textContent = text;
+    f.style.left = x+'px'; f.style.top = y+'px';
+    if(color) f.style.color = color;
+    stage.appendChild(f);
+    let t=0;
+    const anim = () => {
+      t+=16;
+      f.style.top = (y - t/8) + 'px';
+      f.style.opacity = Math.max(0, 1 - t/500);
+      if(t<500) requestAnimationFrame(anim); else f.remove();
+    };
+    requestAnimationFrame(anim);
+  }
+
+  function endGame(){
+    running = false;
+    cancelAnimationFrame(rafId);
+    clearInterval(spawnTimer);
+    clearParcels();
+    const total = delivered+missed;
+    const sla = total ? Math.round((delivered/total)*100) : 0;
+    let rank;
+    if (total === 0) rank = "No deliveries — give it a go!";
+    else if (sla >= 90) rank = "On-Time Delivery Lead \uD83C\uDFC6";
+    else if (sla >= 70) rank = "Solid SLA performance";
+    else if (sla >= 40) rank = "Room for a process review";
+    else rank = "Escalation-worthy — try again!";
+    overlayTitle.textContent = sla + '% SLA';
+    overlayText.textContent = delivered + ' delivered on time, ' + missed + ' missed. ' + rank;
+    startBtn.textContent = 'Play Again';
+    overlay.style.display = 'flex';
+  }
+
+  function tick(ts){
+    if(!running) return;
+    if(!lastTs) lastTs = ts;
+    const dt = (ts - lastTs)/1000;
+    lastTs = ts;
+
+    const truckTop = stageH - 42;
+
+    for(let i=parcels.length-1;i>=0;i--){
+      const p = parcels[i];
+      p.y += p.speed*dt;
+      p.el.style.top = p.y+'px';
+
+      if (p.y+26 >= truckTop && p.y+26 <= truckTop+34){
+        const truckLeft = truckX, truckRight = truckX+64;
+        if (p.x+30 > truckLeft && p.x < truckRight){
+          delivered++;
+          elDelivered.textContent = delivered;
+          floatText(p.x, p.y, '+1 on time', '#0E8F82');
+          p.el.remove();
+          parcels.splice(i,1);
+          continue;
+        }
+      }
+      if (p.y > stageH){
+        missed++;
+        elMissed.textContent = missed;
+        floatText(p.x, stageH-70, 'missed SLA', '#C4614F');
+        p.el.remove();
+        parcels.splice(i,1);
+      }
+    }
+
+    const speedPx = 320*dt;
+    if(keyLeft) truckX -= speedPx;
+    if(keyRight) truckX += speedPx;
+    truckX = Math.max(0, Math.min(stageW-64, truckX));
+    truck.style.left = truckX+'px';
+
+    const total = delivered+missed;
+    elSla.textContent = total ? Math.round((delivered/total)*100)+'%' : '—';
+
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function startGame(){
+    layout();
+    resetHud();
+    clearParcels();
+    overlay.style.display = 'none';
+    running = true;
+    lastTs = 0;
+    rafId = requestAnimationFrame(tick);
+
+    spawnTimer = setInterval(() => {
+      if(!running) return;
+      spawnParcel();
+    }, spawnEvery);
+
+    const countdown = setInterval(() => {
+      timeLeft--;
+      elTime.textContent = Math.max(timeLeft,0);
+      if(timeLeft <= 0){
+        clearInterval(countdown);
+        endGame();
+      }
+    }, 1000);
+  }
+
+  startBtn.addEventListener('click', startGame);
+
+  stage.addEventListener('mousemove', (e) => {
+    if(!running) return;
+    const rect = stage.getBoundingClientRect();
+    truckX = Math.max(0, Math.min(stageW-64, e.clientX - rect.left - 32));
+    truck.style.left = truckX+'px';
+  });
+  stage.addEventListener('touchmove', (e) => {
+    if(!running) return;
+    e.preventDefault();
+    const rect = stage.getBoundingClientRect();
+    const touch = e.touches[0];
+    truckX = Math.max(0, Math.min(stageW-64, touch.clientX - rect.left - 32));
+    truck.style.left = truckX+'px';
+  }, {passive:false});
+
+  window.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowLeft') keyLeft = true;
+    if(e.key === 'ArrowRight') keyRight = true;
+  });
+  window.addEventListener('keyup', (e) => {
+    if(e.key === 'ArrowLeft') keyLeft = false;
+    if(e.key === 'ArrowRight') keyRight = false;
+  });
+})();
 </script>
 
 </body>
